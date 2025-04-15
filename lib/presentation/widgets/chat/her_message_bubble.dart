@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:yes_no_app/domain/entities/message.dart';
+
 class HerMessageBubble extends StatelessWidget {
-  const HerMessageBubble({super.key});
+  final Message message;
+
+  const HerMessageBubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +20,16 @@ class HerMessageBubble extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: Text(
-              "Hola ella",
-              style: TextStyle(color: Colors.white),
+              message.text,
+              style: const TextStyle(color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ),
         ),
         SizedBox(height: 5),
-        _ImageBubble(),
+        _ImageBubble(imageUrl: message.imgUrl!),
         SizedBox(height: 10),
       ],
     );
@@ -33,27 +37,24 @@ class HerMessageBubble extends StatelessWidget {
 }
 
 class _ImageBubble extends StatelessWidget {
+  final String imageUrl;
+
+  const _ImageBubble({required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
-
     final imageSize = MediaQuery.of(context).size;
-    print("MIs dimensionesss");
-    print(imageSize);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Image.network(
-        "https://yesno.wtf/assets/yes/4-c53643ecec77153eefb461e053fb4947.gif",
+        imageUrl,
         width: imageSize.width * 0.7,
         height: 150,
         fit: BoxFit.cover,
         loadingBuilder: (context, child, loadingProgress) {
-
-          if(loadingProgress == null) return child;
-          return Container(
-            child: Text("Esta cargando la imagen"),
-          );
+          if (loadingProgress == null) return child;
+          return Container(child: Text("Esta cargando la imagen"));
         },
       ),
     );
